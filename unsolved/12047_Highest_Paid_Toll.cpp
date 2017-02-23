@@ -63,17 +63,3 @@ int main(){
     }
     return 0;
 }
-
-        }
-        vector<int> cost1,cost2,toll1,toll2;
-        dikjstra(s,cost1,toll1,v1);dikjstra(t,cost2,toll2,v2);
-        int ans = -1;
-        for(int i = 0; i < e.size(); i++){
-            int u = e[i].first.first, v = e[i].first.second, c = e[i].second;
-            if(cost1[u] == INT_MAX || cost2[v] == INT_MAX) continue;
-            if(cost1[u]+cost2[v]+c <= p) ans = max(ans,max(c,max(toll1[u],toll2[v])));
-        }
-        cout << ans << endl;
-    }
-    return 0;
-}
