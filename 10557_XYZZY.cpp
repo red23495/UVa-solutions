@@ -5,7 +5,7 @@ using namespace std;
 int n;
 vector<vector<int>> v;
 vector<int> cost,dist;
-
+vector<int> ccle;
 void bellman_ford(){
     dist.clear();
     dist.resize(n,INT_MIN);
@@ -22,14 +22,18 @@ void bellman_ford(){
 }
 
 bool cycle(){
+    bool ret = false;
     for(int j = 0; j < n; j++){
         for(int k = 0; k < v[j].size(); k++){
             if(dist[j] <= 0 || j == n-1) continue;
             int nw = cost[j] + dist[j];
-            if(nw > dist[v[j][k]]) return true;
+            if(nw > dist[v[j][k]]){
+                ret = true;
+                ccle.push_back(v[j][k]);
+            }
         }
     }
-    return false;
+    return ret;
 }
 
 vector<bool> visited;
@@ -45,6 +49,13 @@ bool dfs(int p){
     return false;
 }
 
+bool reachable(){
+    for(int i = 0; i < ccle.size(); i++){
+        if(dfs(ccle[i])) return true;
+    }
+    return false;
+}
+
 int main(){
     cin.sync_with_stdio(false);
     cout.sync_with_stdio(false);
@@ -55,6 +66,7 @@ int main(){
         cost.resize(n);
         visited.clear();
         visited.resize(n);
+        ccle.clear();
         for(int i = 0; i < n; i++){
             int w,n;
             cin >> w >> n;
@@ -68,7 +80,7 @@ int main(){
         bellman_ford();
         int ans = dist[n-1];
         //cout << ans << endl;
-        if(ans > 0 || (cycle() && dfs(0))) cout << "winnable\n";
+        if(ans > 0 || (cycle() && reachable())) cout << "winnable\n";
         else cout << "hopeless\n";
     }
     return 0;
